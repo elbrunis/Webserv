@@ -8,6 +8,11 @@
 # include <unistd.h>
 # include <sys/socket.h>
 # include <fcntl.h>
+# include <netinet/in.h>
+# include <arpa/inet.h>
+# include <stdexcept>
+# include <iostream>
+# include <cstring>
 
 # define BUFF_LEN 4096
 

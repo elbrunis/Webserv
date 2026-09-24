@@ -6,7 +6,7 @@
 class	Client
 {
 	public:
-		int			fd;
+		int			fd;// creo q no se utiliza
 		std::string readbuffer;
 		std::string writebuffer;
 		int			bitesent;

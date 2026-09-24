@@ -7,6 +7,7 @@
 class	Server
 {
 	public:
+		Server (int port);
 		void	run(); //En un futuro aqui ira la config
 	private:
 		int							lisent_fd;
@@ -15,6 +16,7 @@ class	Server
 		void	accept_new_client();
 		int		read_client(int i);
 		void 	write_client(int i);
+		void	setupSocket(int port);
 
 };
 
