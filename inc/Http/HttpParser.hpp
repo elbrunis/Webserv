@@ -16,7 +16,7 @@ struct HTTPRequest
 class RequestParser
 {
 	public:
-		RequestParser(); // por algun motivo cuando lo inicio da error
+		RequestParser(); // Pendiente: da error al inicializarlo
 		bool feed(std::string str);
 	private:
 		enum	State {REQUEST_LINE, HEADERS, BODY, ERROR, CHUNK_SIZE, CHUNK_DATA, CHUNK_TRAILER, CONTENT_LENGTH, DONE};
@@ -26,6 +26,14 @@ class RequestParser
 		void	parseHeader();
 		void	startBody();
 		bool 	feed(const char* data, size_t n);
+		// utils
+		bool	processState();
+		bool	processRequestLine();
+		bool	processHeaders();
+		bool	processContentLength();
+		bool	processChunkSize();
+		bool	processChunkData();
+		bool	processChunkTrailer();
 
 		Client& 	client;
 		std::string	_buff;

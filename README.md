@@ -242,7 +242,7 @@ webserv/
 │   │   └── LocationConfig.hpp  # `location {}` block model
 │   ├── 📁 Http/
 │   │   ├── HttpParser.hpp      # Incremental request state machine
-│   │   ├── HttpRequest.hpp     # Parsed request representation
+│   │   ├── HttpParserState.hpp # Parser state processing
 │   │   └── HttpResponse.hpp    # Response builder (status, headers, body)
 │   ├── 📁 Cgi/
 │   │   └── CgiHandler.hpp      # fork/execve/pipe CGI runner
