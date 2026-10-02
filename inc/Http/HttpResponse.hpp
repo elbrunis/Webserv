@@ -1,12 +1,17 @@
+#ifndef HTTP_RESPONSE_HPP
+# define HTTP_RESPONSE_HPP
+
+
 #include "../Headers.hpp"
 
-class HTTPresponse
+class HTTPResponse
 {
 	public:
-		HTTPresponse(int code) : _code(code), _host("/"){};
+		HTTPResponse() : _code(0), _host("/"){};
 		void		setHeader(const std::string& n, const std::string& v);
 		void		addToBody(std::string body){_body += body;}
 		void		setHost(std::string host){_host = host;}
+		void		setCode(int code){_code = code;}
 		std::string	toStr();
 
 	private:
@@ -29,3 +34,5 @@ class HTTPresponse
 			}	
 		}
 };
+
+#endif

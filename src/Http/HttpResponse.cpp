@@ -1,13 +1,13 @@
 #include "../../inc/Http/HttpResponse.hpp"
 
-std::string	HTTPresponse::toStr()
+std::string	HTTPResponse::toStr()
 {
 	std::ostringstream str;
 	str << "HTTP/1.1 " << _code << " " << reason(_code) << "\r\n";
 
 	str << "host: " << _host << "\r\n";
-	for (const auto& par : _headers)
-		str << par.first << par.second << "\r\n";
+	for (std::map<std::string, std::string>::const_iterator it = _headers.begin(); it != _headers.end(); ++it)
+		str << it->first << it->second << "\r\n";
 	str << "\r\n";
 
 	if (!_body.empty())
@@ -15,7 +15,7 @@ std::string	HTTPresponse::toStr()
 	return str.str();
 }
 
-void		HTTPresponse::setHeader(const std::string& n, const std::string& v)
+void		HTTPResponse::setHeader(const std::string& n, const std::string& v)
 {
 	if (_headers.count(n))
 		_headers[n] += ", " + v;

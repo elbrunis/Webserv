@@ -1,23 +1,16 @@
 #ifndef HTTPPARSER_HPP
 # define HTTPPARSER_HPP
 
-#include "../Headers.hpp"
-#include "../Client.hpp"
-#include "../Utils/Utils.hpp"
-
-
-struct HTTPRequest
-{
-	std::string method, uri, version;
-	std::map<std::string, std::string> headers;
-	std::string body;
-};
+#include <string>
+#include "HttpRequest.hpp"
+#include "HttpResponse.hpp"
 
 class RequestParser
 {
 	public:
-		RequestParser(); // Pendiente: da error al inicializarlo
-		bool feed(std::string str);
+		RequestParser() : _status(0), _state(REQUEST_LINE), _need(0){}; // Pendiente: da error al inicializarlo
+		bool 	feed(const char* data, size_t n);
+		int		statusCode();
 	private:
 		enum	State {REQUEST_LINE, HEADERS, BODY, ERROR, CHUNK_SIZE, CHUNK_DATA, CHUNK_TRAILER, CONTENT_LENGTH, DONE};
 		bool	nextLine();
@@ -25,7 +18,6 @@ class RequestParser
 		bool	error(int n);
 		void	parseHeader();
 		void	startBody();
-		bool 	feed(const char* data, size_t n);
 		// utils
 		bool	processState();
 		bool	processRequestLine();
@@ -35,13 +27,12 @@ class RequestParser
 		bool	processChunkData();
 		bool	processChunkTrailer();
 
-		Client& 	client;
-		std::string	_buff;
-		std::string	_line;
-		HTTPRequest	_request;
-		int			_status;
-		State		_state;
-		int			_need;
+		std::string		_buff;
+		std::string		_line;
+		HTTPRequest		_request;
+		int				_status;
+		State			_state;
+		int				_need;
 };
 
 #endif

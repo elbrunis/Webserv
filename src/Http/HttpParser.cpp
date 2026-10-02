@@ -1,6 +1,11 @@
 #include "../../inc/Http/HttpParser.hpp"
+#include "../../inc/Utils/Utils.hpp"
+#include <cerrno>
+#include <cstdlib>
 
 bool	RequestParser::error(int code){_status = code, _state = ERROR; return true;}
+
+int		RequestParser::statusCode(){return _status;}
 
 bool	RequestParser::nextLine()
 {
@@ -75,7 +80,11 @@ void	RequestParser::startBody()
 	else if (length)
 	{
 		std::string& value = this->_request.headers["content-length"];
-		if (value.empty() || !std::all_of(value.begin(), value.end(), ::isdigit))
+		bool allDigit = !value.empty();
+		for (size_t i = 0; i < value.size(); ++i)
+			if (!std::isdigit(static_cast<unsigned char>(value[i])))
+				{allDigit = false; break;}
+		if (!allDigit)
 			{error(400); return;}
 		
 		errno = 0;

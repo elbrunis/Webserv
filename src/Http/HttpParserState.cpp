@@ -1,4 +1,7 @@
 #include "../../inc/Http/HttpParser.hpp"
+#include <cerrno>
+#include <cstdlib>
+#include <cctype>
 
 bool RequestParser::feed(const char* data, size_t n)
 {
@@ -65,7 +68,7 @@ bool RequestParser::processHeaders()
 
 bool RequestParser::processContentLength()
 {
-    if (_buff.size() < _need)
+    if (_buff.size() < static_cast<size_t>(_need))
         return false;
 
     _request.body.append(_buff, 0, _need);
@@ -80,9 +83,11 @@ bool RequestParser::processChunkSize()
     if (!nextLine())
         return false;
     errno = 0;
-    if (_line.empty() ||
-        !std::all_of(_line.begin(), _line.end(),
-            [](unsigned char c) { return std::isxdigit(c); }))
+    bool allHex = !_line.empty();
+    for (size_t i = 0; i < _line.size(); ++i)
+        if (!std::isxdigit(static_cast<unsigned char>(_line[i])))
+            {allHex = false; break;}
+    if (!allHex)
         return error(400);
 
     _need = std::strtoul(_line.c_str(), NULL, 16);
@@ -100,7 +105,7 @@ bool RequestParser::processChunkSize()
 
 bool RequestParser::processChunkData()
 {
-    if (_buff.size() < _need + 2)
+    if (_buff.size() < static_cast<size_t>(_need) + 2)
         return false;
 
     if (_buff.compare(_need, 2, "\r\n") != 0)

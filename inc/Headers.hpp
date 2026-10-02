@@ -16,6 +16,11 @@
 # include <sstream>
 # include <algorithm>
 # include <cctype>
+# include "Http/HttpRequest.hpp"
+# include "Http/HttpParser.hpp"
+# include "Http/HttpParserState.hpp"
+# include "Http/HttpResponse.hpp"
+
 
 // tamaño total del buffer
 # define BUFF_LEN 4096

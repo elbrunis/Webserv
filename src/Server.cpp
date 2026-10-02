@@ -59,14 +59,17 @@ int	Server::read_client(int i)
 		return (1);
 	}
 
+
 	Client& c = this->clients[this->fds[i].fd];
-	c.readbuffer.append(buf, n);
-	if (!c.headersComplete && c.readbuffer.find("\r\n\r\n") != std::string::npos)
+
+	if(c.parser.feed(buf, n) && !c.headersComplete)
 	{
-		c.writebuffer = "HTTP/1.1 200 OK\r\nContent-Length: 11\r\n\r\nHello World";
+		int code = (c.parser.statusCode() != 0) ? c.parser.statusCode() : 200;
+		c.response.setCode(code);
+		c.writebuffer = c.response.toStr();
 		c.bitesent = 0;
 		c.headersComplete = true;
-		fds[i].events = POLLOUT;
+		fds[i].events = POLLOUT;		
 	}
 	return (0);
 }
